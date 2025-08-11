@@ -21,6 +21,8 @@ class Category(BaseModel):
 
     def __str__(self) -> str:
         return self.category_name
+    class Meta:
+        verbose_name_plural = "Categories"
 
 
 class ColorVariant(BaseModel):
