@@ -6,15 +6,16 @@ from accounts.models import Cart, CartItem
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from products.models import Product, SizeVariant, ProductReview, Wishlist
+from products.models import Product, SizeVariant, ProductReview, Wishlist,ProductImage
 
 # Create your views here.
+
 
 def get_product(request, slug):
     product = get_object_or_404(Product, slug=slug)
     sorted_size_variants = product.size_variant.all().order_by('size_name')
     related_products = list(product.category.products.filter(parent=None).exclude(uid=product.uid))
-
+    
     # Review product view
     review = None
     if request.user.is_authenticated:
@@ -54,6 +55,7 @@ def get_product(request, slug):
     if request.user.is_authenticated:
         in_wishlist = Wishlist.objects.filter(user=request.user, product=product).exists()
 
+    
     context = {
         'product': product,
         'sorted_size_variants': sorted_size_variants,
@@ -61,6 +63,7 @@ def get_product(request, slug):
         'review_form': review_form,
         'rating_percentage': rating_percentage,
         'in_wishlist': in_wishlist,
+        
     }
 
     if request.GET.get('size'):

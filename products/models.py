@@ -1,11 +1,13 @@
-from django.db import models
-
-# Create your models here.
+import uuid
+import os
+from django.utils.safestring import mark_safe
 from django.db import models
 from base.models import BaseModel
 from django.utils.text import slugify
 from django.utils.html import mark_safe
 from django.contrib.auth.models import User
+from django.urls import reverse
+
 
 # Create your models here.
 
@@ -53,7 +55,10 @@ class Product(BaseModel):
     color_variant = models.ManyToManyField(ColorVariant, blank=True)
     size_variant = models.ManyToManyField(SizeVariant, blank=True)
     newest_product = models.BooleanField(default=False)
+    trending_product = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['-created_at']
     def save(self, *args, **kwargs):
         self.slug = slugify(self.product_name)
         super(Product, self).save(*args, **kwargs)
@@ -71,15 +76,47 @@ class Product(BaseModel):
             return total / self.reviews.count()
         else:
             return 0
+    def get_absolute_url(self):
+        return reverse("get_product", kwargs={"slug": self.slug})
 
+
+def upload_to_random(instance, filename):
+   
+    #Renames uploaded file to a random UUID while keeping extension.
+    
+    ext = filename.split('.')[-1]  # get file extension
+    new_filename = f"{uuid.uuid4().hex}.{ext}"  # generate random name
+    return os.path.join('product', new_filename)  # save inside 'product/' folder
 
 class ProductImage(BaseModel):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name='product_images')
-    image = models.ImageField(upload_to='product')
+    image = models.ImageField(upload_to=upload_to_random)
+
+    # ✅ add flags
+    is_featured = models.BooleanField(default=False)
+    show_in_slider = models.BooleanField(default=False)
+    
+    def save(self, *args, **kwargs):
+        # Ensure exclusivity
+        if self.is_featured:
+            self.show_in_slider = False
+        elif self.show_in_slider:
+            self.is_featured = False
+        super().save(*args, **kwargs)
+    def __str__(self) -> str:
+        return self.product.product_name
+    @classmethod
+    def slider_images(cls):
+        return cls.objects.filter(show_in_slider=True)
+
+    @classmethod
+    def featured_images(cls):
+        return cls.objects.filter(is_featured=True)
 
     def img_preview(self):
         return mark_safe(f'<img src="{self.image.url}" width="500"/>')
+
 
 
 class Coupon(BaseModel):

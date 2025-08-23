@@ -39,19 +39,19 @@ class Command(BaseCommand):
         # 4. Create Products
         products = [
             {
-                "name": "Classic orange T-Shirt",
+                "name": "crop orange T-Shirt",
                 "price": 2000,
                 "description": "A comfortable and stylish orange t-shirt perfect for everyday wear.",
                 "image_url": "https://images.unsplash.com/photo-1625072651838-2a69ff8ed257?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGZhc2hpb24lMjBjbG90aGluZ3xlbnwwfHwwfHx8MA%3D%3D"
             },
             {
-                "name": "Yello Denim Jacket",
+                "name": "Yello gay Jacket",
                 "price": 5000,
                 "description": "A classic yello denim jacket, great for casual outings.",
                 "image_url": "https://plus.unsplash.com/premium_photo-1681433602478-dc69b2b49153?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGZhc2hpb24lMjBjbG90aGluZ3xlbnwwfHwwfHx8MA%3D%3D"
             },
             {
-                "name": "Cozy Jackets",
+                "name": "hot Jackets",
                 "price": 3500,
                 "description": "A warm and cozy jackets for chilly days.",
                 "image_url": "https://images.unsplash.com/photo-1590033951631-a3b5dc4d368f?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGZhc2hpb24lMjBjbG90aGluZ3xlbnwwfHwwfHx8MA%3D%3D"

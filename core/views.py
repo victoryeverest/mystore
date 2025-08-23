@@ -1,16 +1,19 @@
 from django.db.models import Q
 from django.shortcuts import render
-from products.models import Product, Category
+from products.models import Product, Category,ProductImage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 # Create your views here.
 
 
 def index(request):
-    query = Product.objects.all()
+    query = Product.objects.all()  # only 10 products
     categories = Category.objects.all()
     selected_sort = request.GET.get('sort')
     selected_category = request.GET.get('category')
+    slider_images = ProductImage.slider_images()
+    featured_images = ProductImage.featured_images()
+  
 
     if selected_category:
         query = query.filter(category__category_name=selected_category)
@@ -23,6 +26,8 @@ def index(request):
         elif selected_sort == 'priceDesc':
             query = query.order_by('-price')
 
+    query = query[:10]
+     
     page = request.GET.get('page', 1)
     paginator = Paginator(query, 20)
 
@@ -40,6 +45,10 @@ def index(request):
         'categories': categories,
         'selected_category': selected_category,
         'selected_sort': selected_sort,
+        "slider_images":slider_images,
+        "featured_images":featured_images
+
+
     }
     return render(request, 'core/index.html', context)
 
@@ -67,9 +76,3 @@ def about(request):
     return render(request, 'core/about.html')
 
 
-def terms_and_conditions(request):
-    return render(request, 'core/terms_and_conditions.html')
-
-
-def privacy_policy(request):
-    return render(request, 'core/privacy_policy.html')

@@ -1,1 +1,196 @@
-<H4>Hello Home</H4>
+{% extends 'core/base.html' %}
+{% load static %}
+{% block body %}
+
+
+ <!-- content -->
+        <div class="slide v2">
+            <div class="js-slider-v3">
+
+                 {% for img in slider_images %}
+                {% if img.image %}
+  
+                <div class="slide-img">
+                    <img src="{{ img.image.url }}" alt="{{ img.product.product_name }}" class="img-responsive">
+                    <div class="box-center content1">
+                        <h3>New Arrivals</h3>
+                        <a href="{{ img.product.get_absolute_url }}" class="slide-btn">Shop Now</a>
+                    </div>
+                </div>
+                {% endif %}
+                {% empty %}
+      <p>No slider images available</p>
+                {% endfor %}
+               
+            </div>
+            <div class="custom">
+                <div class="pagingInfo"></div>
+            </div>
+        </div>
+        <!-- End content -->
+        <div class="banner pad">
+            <div class="container container-content">
+                <div class="row">
+                    {% for img in featured_images %}
+
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="banner-img">
+                            <a href="" class="effect-img3 plus-zoom">
+                                <img src="{{img.image.url}}" alt="">
+                            </a>
+                            {% if img.product.newest_product %}
+                            <div class="box-center content">
+                                <h3>≥ Hostest</h3>
+                                <a href="{{ img.product.get_absolute_url }}">Discovery</a>
+                            </div>
+                            
+                            {% elif img.product.trending_product %}
+                            <div class="box-center content">
+                                <h3>≥ Trending</h3>
+                                <a href="{{ img.product.get_absolute_url }}">Discovery</a>
+                            </div>
+                            {% else %}
+                            nothing to show
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                </div>
+            </div>
+        </div>
+        <div class="zoa-product pad">
+            <h3 class="title home-title text-center">featured products</h3>
+            <div class="container container-content">
+                <div class="row engoc-row-equal">
+                   {% for product in products %}
+    
+                    <div class="col-xs-6 col-sm-4 col-md-15 col-lg-15 product-item">
+                        <div class="product-img">
+                            <a href=""><img src="/media/{{product.product_images.first.image}}" alt="{{ product.product_name }}" class="img-responsive"></a>
+                            <div class="ribbon zoa-hot"><span>Hot</span></div>
+                            <div class="product-button-group">
+                                <a href="{{product.get_absolute_url }}" class="zoa-btn zoa-quickview">
+                                    <span class="zoa-icon-quick-view"></span>
+                                </a>
+                                <a href="#" class="zoa-btn zoa-wishlist">
+                                    <span class="zoa-icon-heart"></span>
+                                </a>
+                                <a href="#" class="zoa-btn zoa-addcart">
+                                    <span class="zoa-icon-cart"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="product-info text-center">
+                            <h3 class="product-title">
+                                <a href="{{product.get_absolute_url }}">{{ product.product_name }}</a>
+                            </h3>
+                            <div class="product-price">
+                                <span>₦{{product.price}}.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+
+                    
+                </div>
+                <div class="text-center">
+                    <a href="" class="zoa-btn btn-loadmore">Load more</a>
+                </div>
+                </div>
+            </div>
+<style>
+  .filter-section {
+      margin-bottom: 20px;
+  }
+
+  .form-group {
+      margin-bottom: 10px;
+  }
+
+  @keyframes appear {
+    from {
+      opacity: 0;
+      scale: 0.5;
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  .card {
+    animation: appear linear;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+  }
+</style>
+<div class="container mt-3 pt-3">
+  <!-- Filter Section -->
+  <div class="filter-section mb-3">
+    <form method="GET" class="row">
+      <div class="form-group col-md-6">
+        <label for="category">Category:</label>
+        <select id="category" name="category" class="form-control" onchange="this.form.submit()">
+          <option value="">All</option>
+          {% for category in categories %}
+          <option value="{{ category.category_name }}" {% if selected_category == category.category_name %} selected {% endif %}>
+            {{ category.category_name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      <!-- Sort Section -->
+      <div class="form-group col-md-6">
+        <label for="sort">Sort by:</label>
+        <select id="sort" name="sort" class="form-control" onchange="this.form.submit()">
+          <option value="">Select</option>
+          <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>Newest</option>
+          <option value="priceAsc" {% if selected_sort == 'priceAsc' %}selected{% endif %}>Price: Low-High</option>
+          <option value="priceDesc" {% if selected_sort == 'priceDesc' %}selected{% endif %}>Price: High-Low</option>
+        </select>
+      </div>
+    </form>
+  </div>
+
+  
+  <!-- Pagination Section -->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center mb-4">
+      {% if products.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo; Previous</span>
+        </a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link">Previous</a>
+      </li>
+      {% endif %}
+
+      {% for num in products.paginator.page_range %}
+      <li class="page-item {% if products.number == num %}active{% endif %}">
+        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+      </li>
+      {% endfor %}
+
+      {% if products.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ products.next_page_number }}" aria-label="Next">
+          <span aria-hidden="true">Next &raquo;</span>
+        </a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link">Next</a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  
+</div>
+
+{% endblock %}
