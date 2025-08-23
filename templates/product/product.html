@@ -17,17 +17,15 @@
                         <div class="product-img-slide">
                             <div class="product-images">
                                 <div class="ribbon zoa-sale"><span>-15%</span></div>
+                                                        {% for image in product.product_images.all %}
                                 <div class="main-img js-product-slider-normal">
-                                    <a href="#" class="hover-images effect"><img src="img/product/single_1a.jpg" alt="photo" class="img-responsive"></a>
-                                    <a href="#" class="hover-images effect"><img src="img/product/single_2a.jpg" alt="photo" class="img-responsive"></a>
-                                    <a href="#" class="hover-images effect"><img src="img/product/single_3a.jpg" alt="photo" class="img-responsive"></a>
-                                    <a href="#" class="hover-images effect"><img src="img/product/single_4a.jpg" alt="photo" class="img-responsive"></a>
-                                    <a href="#" class="hover-images effect"><img src="img/product/single_5a.jpg" alt="photo" class="img-responsive"></a>
-                                </div>
+                                    <a href="#" class="hover-images effect"><img src="{{ image.image.url }}" alt="photo" class="img-responsive"></a>
+                                     </div>
+                                {% endfor %}
                             </div>
                             <div class="multiple-img-list js-click-product-normal">
                                 <div class="product-col">
-                                    <div class="img active">
+                                  <div class="img active">
                                         <img src="img/product/single_1.jpg" alt="photo" class="img-responsive">
                                     </div>
                                 </div>

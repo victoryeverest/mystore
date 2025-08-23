@@ -34,13 +34,13 @@
                     {% for img in featured_images %}
 
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <div class="banner-img">
-                            <a href="" class="effect-img3 plus-zoom">
+                        <div class="banner-img effect-img3 plus-zoom">
+                            <a href="" >
                                 <img src="{{img.image.url}}" alt="">
                             </a>
                             {% if img.product.newest_product %}
                             <div class="box-center content">
-                                <h3>≥ Hostest</h3>
+                                <h3>≥ Hotest</h3>
                                 <a href="{{ img.product.get_absolute_url }}">Discovery</a>
                             </div>
                             
